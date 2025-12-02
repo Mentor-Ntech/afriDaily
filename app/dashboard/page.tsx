@@ -68,6 +68,9 @@ const mockActivity = [
     description: "Withdrawal to wallet",
     status: "success" as const,
     timestamp: new Date("2025-12-02T09:30:00"),
+    hash: "0xabc123def456ghi789jkl012mno345pqr678stu901vwx234yz",
+    address: "0x1234567890123456789012345678901234567890",
+    fee: "0.10",
   },
   {
     id: "2",
@@ -77,6 +80,9 @@ const mockActivity = [
     description: "Contribution to Family Ajo",
     status: "success" as const,
     timestamp: new Date("2025-12-01T14:20:00"),
+    hash: "0xdef456ghi789jkl012mno345pqr678stu901vwx234yz567abc",
+    address: "0x9876543210987654321098765432109876543210",
+    fee: "0.10",
   },
   {
     id: "3",
@@ -86,6 +92,9 @@ const mockActivity = [
     description: "Earned from Freelance Project",
     status: "success" as const,
     timestamp: new Date("2025-11-30T10:15:00"),
+    hash: "0xghi789jkl012mno345pqr678stu901vwx234yz567abc890def",
+    address: "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd",
+    fee: "0.00",
   },
 ]
 
@@ -112,9 +121,9 @@ export default function DashboardPage() {
               <div>
                 <p className="text-sm text-muted-foreground font-medium mb-2">Total Balance</p>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-[32px] md:text-[40px] lg:text-[48px] font-bold text-primary leading-[1.4]">
-                    ₵{totalBalance}
-                  </span>
+                          <span className="text-[32px] md:text-[40px] lg:text-[48px] font-bold text-primary leading-[1.4]">
+                            ${totalBalance}
+                          </span>
                   <span className="text-sm text-muted-foreground">cUSD</span>
                 </div>
               </div>

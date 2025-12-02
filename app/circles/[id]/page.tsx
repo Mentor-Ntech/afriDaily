@@ -1,15 +1,24 @@
 "use client"
 
-import { use } from "react"
+import { use, useState } from "react"
 import { Button } from "@/components/ui/button-custom"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card-custom"
-import { ArrowLeft, Users, TrendingUp, Plus, CheckCircle2, Clock, Calendar } from "lucide-react"
+import { ArrowLeft, Users, TrendingUp, Plus, CheckCircle2, Clock, Calendar, Copy, ExternalLink, Send } from "lucide-react"
 import Link from "next/link"
 import { formatDate, formatCurrency, formatAddress } from "@/lib/formatting"
 import { Progress } from "@/components/ui/progress"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input-custom"
+import { useToast } from "@/hooks/use-toast"
 
 export default function CircleDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
+  const { toast } = useToast()
+  const [showInviteDialog, setShowInviteDialog] = useState(false)
+  const [showHistoryDialog, setShowHistoryDialog] = useState(false)
+  const [inviteAddress, setInviteAddress] = useState("")
+  const [copied, setCopied] = useState(false)
+
   const circle = {
     id,
     name: "Family Ajo Circle",
@@ -30,6 +39,91 @@ export default function CircleDetailsPage({ params }: { params: Promise<{ id: st
       { address: "0x5678901234567890123456789012345678901234", status: "paid" as const, paidDate: "2025-12-03" },
       { address: "0xefghijklmnopqrstuvwxyzabcdefghijklmnop", status: "paid" as const, paidDate: "2025-12-01" },
     ],
+  }
+
+  // Mock history data
+  const historyData = [
+    {
+      id: "1",
+      type: "contribution" as const,
+      member: "0x1234...5678",
+      amount: "50.00",
+      currency: "cUSD" as const,
+      date: "2025-12-01",
+      status: "completed" as const,
+      txHash: "0xabc123...",
+    },
+    {
+      id: "2",
+      type: "contribution" as const,
+      member: "0x9876...5432",
+      amount: "50.00",
+      currency: "cUSD" as const,
+      date: "2025-11-15",
+      status: "completed" as const,
+      txHash: "0xdef456...",
+    },
+    {
+      id: "3",
+      type: "payout" as const,
+      member: "0xabcd...ef01",
+      amount: "250.00",
+      currency: "cUSD" as const,
+      date: "2025-11-01",
+      status: "completed" as const,
+      txHash: "0xghi789...",
+    },
+    {
+      id: "4",
+      type: "contribution" as const,
+      member: "0x5678...9012",
+      amount: "50.00",
+      currency: "cUSD" as const,
+      date: "2025-10-15",
+      status: "completed" as const,
+      txHash: "0xjkl012...",
+    },
+  ]
+
+  const handleInviteMember = () => {
+    if (!inviteAddress || !inviteAddress.startsWith("0x") || inviteAddress.length !== 42) {
+      toast({
+        title: "Invalid address",
+        description: "Please enter a valid wallet address (0x followed by 40 characters)",
+        variant: "destructive",
+      })
+      return
+    }
+
+    // In a real app, this would call a smart contract or API
+    toast({
+      title: "Invitation sent",
+      description: `Invitation sent to ${formatAddress(inviteAddress, 4)}`,
+    })
+    setInviteAddress("")
+    setShowInviteDialog(false)
+  }
+
+  const handleCopyAddress = async (address: string) => {
+    try {
+      await navigator.clipboard.writeText(address)
+      setCopied(true)
+      toast({
+        title: "Address copied",
+        description: "Wallet address copied to clipboard",
+      })
+      setTimeout(() => setCopied(false), 2000)
+    } catch (error) {
+      toast({
+        title: "Failed to copy",
+        description: "Please try again",
+        variant: "destructive",
+      })
+    }
+  }
+
+  const isValidAddress = (address: string) => {
+    return address.startsWith("0x") && address.length === 42
   }
 
   return (
@@ -146,11 +240,19 @@ export default function CircleDetailsPage({ params }: { params: Promise<{ id: st
                   Make Contribution
                 </Link>
               </Button>
-              <Button variant="secondary" className="w-full justify-start gap-2 h-11">
+              <Button
+                variant="secondary"
+                className="w-full justify-start gap-2 h-11"
+                onClick={() => setShowInviteDialog(true)}
+              >
                 <Users className="w-4 h-4" />
                 Invite Member
               </Button>
-              <Button variant="ghost" className="w-full justify-start gap-2 h-11">
+              <Button
+                variant="ghost"
+                className="w-full justify-start gap-2 h-11"
+                onClick={() => setShowHistoryDialog(true)}
+              >
                 <TrendingUp className="w-4 h-4" />
                 View History
               </Button>
@@ -196,6 +298,173 @@ export default function CircleDetailsPage({ params }: { params: Promise<{ id: st
           </CardContent>
         </Card>
       </div>
+
+      {/* Invite Member Dialog */}
+      <Dialog open={showInviteDialog} onOpenChange={setShowInviteDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-[24px] leading-[1.4]">Invite Member</DialogTitle>
+            <DialogDescription>
+              Invite a new member to join this savings circle. They will receive an invitation notification.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-6 py-4">
+            <div className="bg-muted rounded-lg p-4">
+              <p className="text-sm font-semibold text-foreground mb-2">Circle Information</p>
+              <div className="space-y-1 text-sm text-muted-foreground">
+                <p>Circle: {circle.name}</p>
+                <p>Type: {circle.type === "ajo" ? "Rotating Savings (Ajo)" : "Fixed Monthly (Esusu)"}</p>
+                <p>Monthly Contribution: {formatCurrency(circle.nextAmount, circle.currency)}</p>
+              </div>
+            </div>
+
+            <div>
+              <Input
+                label="Wallet Address"
+                placeholder="0x..."
+                value={inviteAddress}
+                onChange={(e) => setInviteAddress(e.target.value)}
+                error={
+                  inviteAddress && !isValidAddress(inviteAddress)
+                    ? "Invalid wallet address format"
+                    : undefined
+                }
+                helperText="Enter the wallet address of the member you want to invite"
+              />
+            </div>
+
+            <div className="bg-accent/5 border border-accent/20 rounded-lg p-4">
+              <div className="flex items-start gap-2">
+                <Clock className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                <div className="space-y-1 text-sm text-muted-foreground">
+                  <p className="font-semibold text-foreground">What happens next?</p>
+                  <ul className="list-disc list-inside space-y-1">
+                    <li>The member will receive an invitation notification</li>
+                    <li>They can accept or decline the invitation</li>
+                    <li>Once accepted, they can start contributing</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <Button variant="secondary" onClick={() => setShowInviteDialog(false)} className="flex-1 h-11">
+                Cancel
+              </Button>
+              <Button
+                onClick={handleInviteMember}
+                disabled={!inviteAddress || !isValidAddress(inviteAddress)}
+                className="flex-1 h-11 gap-2"
+              >
+                <Send className="w-4 h-4" />
+                Send Invitation
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* View History Dialog */}
+      <Dialog open={showHistoryDialog} onOpenChange={setShowHistoryDialog}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-[24px] leading-[1.4]">Circle History</DialogTitle>
+            <DialogDescription>
+              View all transactions and contributions for this savings circle
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="bg-muted rounded-lg p-4">
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p className="text-muted-foreground mb-1">Circle Name</p>
+                  <p className="font-semibold text-foreground">{circle.name}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground mb-1">Total Transactions</p>
+                  <p className="font-semibold text-foreground">{historyData.length}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {historyData.map((item) => (
+                <Card key={item.id} className="border">
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          {item.type === "contribution" ? (
+                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                              <Plus className="w-4 h-4 text-primary" />
+                            </div>
+                          ) : (
+                            <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center">
+                              <TrendingUp className="w-4 h-4 text-accent" />
+                            </div>
+                          )}
+                          <div>
+                            <p className="font-semibold text-foreground capitalize">{item.type}</p>
+                            <p className="text-sm text-muted-foreground font-mono">
+                              {formatAddress(item.member, 6)}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground ml-10">
+                          <span>{formatDate(new Date(item.date))}</span>
+                          <span className="font-mono text-xs">{formatAddress(item.txHash, 8)}</span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-lg font-bold text-foreground">
+                          {item.type === "contribution" ? "+" : "-"}
+                          {formatCurrency(item.amount, item.currency)}
+                        </p>
+                        <div className="flex items-center gap-2 mt-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => handleCopyAddress(item.txHash)}
+                            title="Copy transaction hash"
+                          >
+                            {copied ? (
+                              <CheckCircle2 className="w-4 h-4 text-[#16A34A]" />
+                            ) : (
+                              <Copy className="w-4 h-4" />
+                            )}
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                            asChild
+                            title="View on explorer"
+                          >
+                            <a
+                              href={`https://explorer.celo.org/mainnet/tx/${item.txHash}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <ExternalLink className="w-4 h-4" />
+                            </a>
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <div className="flex justify-center pt-4">
+              <Button variant="secondary" onClick={() => setShowHistoryDialog(false)} className="h-11">
+                Close
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

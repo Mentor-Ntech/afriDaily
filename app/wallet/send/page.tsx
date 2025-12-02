@@ -79,9 +79,9 @@ export default function SendPage() {
                 />
 
                 <div className="bg-muted rounded-lg p-4 text-xs text-muted-foreground space-y-1">
-                  <p>Available balance: ₵347.92</p>
-                  <p>Network fee: ₵0.10 (estimated)</p>
-                  <p>Total: ₵{(Number.parseFloat(amount || "0") + 0.1).toFixed(2)}</p>
+                  <p>Available balance: $347.92</p>
+                  <p>Network fee: $0.10 (estimated)</p>
+                  <p>Total: ${(Number.parseFloat(amount || "0") + 0.1).toFixed(2)}</p>
                 </div>
 
                 <Button onClick={handleReview} className="w-full">
@@ -107,7 +107,7 @@ export default function SendPage() {
                   <div>
                     <p className="text-xs uppercase tracking-wide font-semibold text-muted-foreground mb-1">Amount</p>
                     <p className="text-2xl font-bold text-primary">
-                      {currency === "cUSD" ? "₵" : "₦"}
+                      {currency === "cUSD" ? "$" : "₦"}
                       {amount}
                     </p>
                   </div>
@@ -115,7 +115,7 @@ export default function SendPage() {
                     <p className="text-xs uppercase tracking-wide font-semibold text-muted-foreground mb-1">
                       Network Fee
                     </p>
-                    <p className="font-semibold text-foreground">₵0.10</p>
+                    <p className="font-semibold text-foreground">$0.10</p>
                   </div>
                 </div>
 

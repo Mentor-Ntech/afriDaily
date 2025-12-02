@@ -47,7 +47,7 @@ export const MOTION = {
 }
 
 export const CURRENCY_SYMBOLS = {
-  cUSD: "₵",
+  cUSD: "$",
   cNGN: "₦",
 }
 

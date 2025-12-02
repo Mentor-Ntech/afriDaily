@@ -383,7 +383,7 @@ export default function CreateCirclePage() {
                         Monthly Contribution
                       </p>
                       <p className="text-lg md:text-xl font-bold text-primary">
-                        {formData.currency === "cUSD" ? "₵" : "₦"}
+                        {formData.currency === "cUSD" ? "$" : "₦"}
                         {Number.parseFloat(formData.contributionAmount || "0").toLocaleString("en-US", {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
@@ -413,7 +413,7 @@ export default function CreateCirclePage() {
                 </div>
 
                 <div className="bg-accent/10 border border-accent/30 rounded-lg p-4 text-sm text-muted-foreground">
-                  Smart contract deployment fee: ₵1.50
+                  Smart contract deployment fee: $1.50
                 </div>
 
                 <div className="flex gap-3">

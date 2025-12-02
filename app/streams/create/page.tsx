@@ -246,7 +246,7 @@ export default function CreateStreamPage() {
                         Hourly Rate
                       </p>
                       <p className="text-lg md:text-xl font-bold text-primary">
-                        {formData.currency === "cUSD" ? "₵" : "₦"}
+                        {formData.currency === "cUSD" ? "$" : "₦"}
                         {Number.parseFloat(formData.hourlyRate || "0").toLocaleString("en-US", {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
@@ -258,7 +258,7 @@ export default function CreateStreamPage() {
                         Monthly Potential
                       </p>
                       <p className="text-lg md:text-xl font-bold text-[#16A34A]">
-                        {formData.currency === "cUSD" ? "₵" : "₦"}
+                        {formData.currency === "cUSD" ? "$" : "₦"}
                         {monthlyPotential.toLocaleString("en-US", {
                           minimumFractionDigits: 0,
                           maximumFractionDigits: 0,
@@ -276,7 +276,7 @@ export default function CreateStreamPage() {
                       <li>Payment frequency: {formData.frequency}</li>
                       {formData.autoWithdraw && (
                         <li>
-                          Auto-withdraw threshold: {formData.currency === "cUSD" ? "₵" : "₦"}
+                          Auto-withdraw threshold: {formData.currency === "cUSD" ? "$" : "₦"}
                           {formData.withdrawalThreshold}
                         </li>
                       )}
@@ -285,7 +285,7 @@ export default function CreateStreamPage() {
                 </div>
 
                 <div className="bg-accent/10 border border-accent/30 rounded-lg p-4 text-sm text-muted-foreground">
-                  Estimated gas fee: ₵0.50
+                  Estimated gas fee: $0.50
                 </div>
 
                 <div className="flex gap-3">

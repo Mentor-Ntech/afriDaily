@@ -1,0 +1,365 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Configure AfriDaily brand colors and design tokens per specifications */
+
+/* AfriDaily Brand Colors */
+:root {
+  --color-brand-primary: #0b5fff;
+  --color-brand-accent: #ffb703;
+  --color-brand-success: #16a34a;
+  --color-brand-danger: #ef4444;
+
+  /* Typography System */
+  --font-size-h1: 28px;
+  --font-size-h2: 24px;
+  --font-size-h3: 20px;
+  --font-size-body: 16px;
+  --font-size-small: 14px;
+  --line-height-h1: 1.4;
+  --line-height-h2: 1.4;
+  --line-height-body: 1.5;
+  --line-height-small: 1.4;
+
+  /* Semantic Colors */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: #0b5fff;
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: #1f2937;
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: #6b7280;
+  --accent: #ffb703;
+  --accent-foreground: #1f2937;
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: #ffffff;
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: #0b5fff;
+  --chart-1: #0b5fff;
+  --chart-2: #ffb703;
+  --chart-3: #16a34a;
+  --chart-4: #ef4444;
+  --chart-5: #8b5cf6;
+  --radius: 0.625rem;
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: #1f2937;
+  --sidebar-primary: #0b5fff;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ffb703;
+  --sidebar-accent-foreground: #1f2937;
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: #0b5fff;
+}
+
+/* Dark mode */
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: #3b82f6;
+  --primary-foreground: #111827;
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: #f3f4f6;
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: #9ca3af;
+  --accent: #fcd34d;
+  --accent-foreground: #111827;
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: #111827;
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: #3b82f6;
+  --chart-1: #3b82f6;
+  --chart-2: #fcd34d;
+  --chart-3: #10b981;
+  --chart-4: #f87171;
+  --chart-5: #a78bfa;
+
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: #3b82f6;
+  --sidebar-primary-foreground: #111827;
+  --sidebar-accent: #fcd34d;
+  --sidebar-accent-foreground: #111827;
+  --sidebar-border: #374151;
+  --sidebar-ring: #3b82f6;
+}
+
+@theme inline {
+  /* optional: --font-sans, --font-serif, --font-mono if they are applied in the layout.tsx */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* AfriDaily Typography System - Exact Specifications */
+  h1 {
+    font-size: 28px;
+    line-height: 1.4;
+    font-weight: 700;
+    @apply tracking-tight;
+  }
+
+  h2 {
+    font-size: 24px;
+    line-height: 1.4;
+    font-weight: 600;
+    @apply tracking-tight;
+  }
+
+  h3 {
+    font-size: 20px;
+    line-height: 1.4;
+    font-weight: 600;
+    @apply tracking-tight;
+  }
+
+  p {
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  .text-label {
+    font-size: 14px;
+    line-height: 1.4;
+    font-weight: 500;
+  }
+
+  .text-caption {
+    font-size: 14px;
+    line-height: 1.4;
+    font-weight: 400;
+    @apply text-muted-foreground;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-offset-2;
+    ring-color: var(--color-brand-primary);
+  }
+
+  * {
+    @apply transition-colors duration-200;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      /* Replace invalid @apply with ! modifiers with plain CSS properties */
+      transition: none !important;
+      animation-duration: 0 !important;
+    }
+  }
+}
+
+@layer components {
+  /* Responsive container with safe area padding for mobile notches */
+  .safe-container {
+    @apply w-full px-4 max-w-7xl mx-auto;
+  }
+
+  /* Mobile-first grid utilities */
+  .grid-cols-adaptive {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
+  }
+
+  /* Touch-friendly button sizing (44x44px minimum) */
+  .touch-target {
+    @apply h-11 w-11;
+  }
+
+  /* Offline indicator badge */
+  .offline-badge {
+    @apply bg-accent text-accent-foreground px-3 py-1 rounded-full text-xs font-semibold;
+  }
+
+  /* Skeleton loading animation */
+  .skeleton {
+    @apply bg-muted animate-pulse rounded;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton {
+      @apply !animate-none opacity-50;
+    }
+  }
+
+  /* Card with proper spacing and shadow */
+  .card-base {
+    @apply bg-card text-card-foreground rounded-lg border border-border shadow-sm;
+  }
+
+  /* Currency amount display styling */
+  .currency-amount {
+    @apply text-2xl font-bold text-primary;
+  }
+
+          .currency-symbol {
+            @apply font-normal text-lg;
+          }
+        }
+
+        /* Logo Animations */
+        @keyframes logo-pulse {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.02);
+          }
+        }
+
+        @keyframes logo-rotate {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+
+        @keyframes logo-sparkle {
+          0%, 100% {
+            opacity: 0.3;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 1;
+            transform: scale(1.2);
+          }
+        }
+
+        .logo-animate {
+          animation: logo-pulse 3s ease-in-out infinite;
+        }
+
+        .logo-pulse {
+          animation: logo-pulse 3s ease-in-out infinite;
+        }
+
+        .logo-rotate-slow {
+          animation: logo-rotate 20s linear infinite;
+        }
+
+        .logo-sparkle {
+          animation: logo-sparkle 2s ease-in-out infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .logo-animate,
+          .logo-pulse,
+          .logo-rotate-slow,
+          .logo-sparkle {
+            animation: none !important;
+          }
+        }
+
+        /* Illustration Animations */
+        @keyframes illustration-float {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-5px);
+          }
+        }
+
+        @keyframes illustration-rotate {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+
+        @keyframes illustration-fade {
+          0%, 100% {
+            opacity: 0.3;
+          }
+          50% {
+            opacity: 1;
+          }
+        }
+
+        @keyframes illustration-slide {
+          from {
+            transform: translateX(0);
+          }
+          to {
+            transform: translateX(120px);
+          }
+        }
+
+        @keyframes illustration-pulse {
+          0%, 100% {
+            transform: scale(1);
+            opacity: 0.8;
+          }
+          50% {
+            transform: scale(1.1);
+            opacity: 1;
+          }
+        }
+
+        /* Ensure SVG animations respect reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+          svg animate,
+          svg animateTransform,
+          svg animateMotion {
+            animation: none !important;
+          }
+        }

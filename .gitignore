@@ -5,6 +5,7 @@ node_modules/
 
 # Testing
 coverage/
+.nyc_output
 
 # Production
 build/
@@ -23,12 +24,13 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Local env files
+# Environment variables
 .env
 .env*.local
 .env.development.local
 .env.test.local
 .env.production.local
+*.env
 
 # Vercel
 .vercel
@@ -53,13 +55,28 @@ typechain-types/
 .DS_Store
 Thumbs.db
 
-# Temporary
+# Secrets and keys
+*.key
+*.p12
+*.pfx
+secrets/
+.secrets/
+*.secret
+**/private.key
+**/secrets.json
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
 temp-celo-composer/
 
-.env
-.env.local
-.env.*.local
-*.env
-**/private.key
-**/*.pem
-**/secrets.json
+# PWA
+**/service-worker.js
+**/sw.js
+**/workbox-*.js
+
+# Lock files (optional - some teams prefer to commit these)
+# pnpm-lock.yaml
+# package-lock.json
+# yarn.lock
